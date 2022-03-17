@@ -8,23 +8,22 @@ import android.widget.Button
 import androidx.fragment.app.FragmentManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.swtecnn.contentproviderlesson.databinding.ActivityMainBinding
 
 class MainActivity : AppCompatActivity() {
+    private var _binding: ActivityMainBinding? = null
+    private val binding: ActivityMainBinding get() = _binding!!
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
+        _binding = ActivityMainBinding.inflate(layoutInflater)
 
-        val audio_provider_btn: Button = findViewById(R.id.audio_list_btn)
-        val db_prodiver_btn: Button = findViewById(R.id.db_provider_btn)
-        val contacts_provider_button: Button = findViewById(R.id.contact_list_btn)
-
-        audio_provider_btn.setOnClickListener {
+        binding.audioListBtn.setOnClickListener {
             val intent = Intent(this, AudioListActivity::class.java)
             startActivity(intent)
         }
 
-        db_prodiver_btn.setOnClickListener {
+        binding.dbProviderBtn.setOnClickListener {
             val intent = Intent(this, DiaryActivity::class.java)
             startActivity(intent)
         }

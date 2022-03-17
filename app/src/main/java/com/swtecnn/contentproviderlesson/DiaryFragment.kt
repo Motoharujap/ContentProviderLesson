@@ -13,22 +13,24 @@ import androidx.fragment.app.FragmentActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.swtecnn.contentproviderlesson.content_providers.DbContentProvider
+import com.swtecnn.contentproviderlesson.databinding.FragmentDiaryBinding
 import com.swtecnn.contentproviderlesson.db.DiaryEntry
 
 class DiaryFragment : Fragment() {
+    private var _binding: FragmentDiaryBinding? = null
+    private val binding: FragmentDiaryBinding get() = _binding!!
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
         // Inflate the layout for this fragment
-        val fragmentView: View = inflater.inflate(R.layout.fragment_diary, container, false)
-        val recyclerView: RecyclerView = fragmentView.findViewById(R.id.diary_recycler_view)
+        _binding = FragmentDiaryBinding.inflate(inflater, container, false)
         val adapter = DiaryAdapter()
-        recyclerView.layoutManager = LinearLayoutManager(activity?.applicationContext)
-        recyclerView.adapter = adapter
+        binding.diaryRecyclerView.layoutManager = LinearLayoutManager(activity?.applicationContext)
+        binding.diaryRecyclerView.adapter = adapter
         fillAdapter(adapter)
-        return fragmentView
+        return binding.root
     }
 
     private fun fillAdapter(adapter: DiaryAdapter) {
@@ -57,5 +59,10 @@ class DiaryFragment : Fragment() {
                 adapter.setItems(result)
             }
         }
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
     }
 }

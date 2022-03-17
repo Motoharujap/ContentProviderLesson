@@ -3,7 +3,7 @@
     package="com.swtecnn.contentproviderlesson">
 
     <uses-permission android:name="android.permission.READ_CONTACTS" />
-
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <application
         android:name=".CPApplication"
         android:allowBackup="true"
