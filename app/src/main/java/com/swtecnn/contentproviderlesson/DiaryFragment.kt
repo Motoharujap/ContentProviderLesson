@@ -44,9 +44,10 @@ class DiaryFragment : Fragment() {
             val entries: ArrayList<DiaryEntry> = ArrayList()
             if (cursor != null) {
                 while (cursor.moveToNext()) {
+                    val entryId = cursor.getInt(cursor.getColumnIndex("id"))
                     val textEntry = cursor.getString(cursor.getColumnIndex("entry_text"))
                     val dateText = cursor.getString(cursor.getColumnIndex("entry_date"))
-                    val diaryEntry = DiaryEntry(0, textEntry, dateText)
+                    val diaryEntry = DiaryEntry(entryId, textEntry, dateText)
                     entries.add(diaryEntry)
                 }
             }

@@ -11,5 +11,6 @@ class AudioListActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         _binding = ActivityAudioListBinding.inflate(layoutInflater)
+        setContentView(binding.root)
     }
 }

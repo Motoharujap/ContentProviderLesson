@@ -8,31 +8,37 @@ import android.net.Uri
 import com.swtecnn.contentproviderlesson.db.AppDatabase
 import com.swtecnn.contentproviderlesson.db.DiaryEntry
 import com.swtecnn.contentproviderlesson.db.DiaryEntryDao
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.launch
+import com.swtecnn.contentproviderlesson.db.ToDoListEntryDao
 
 class DbContentProvider: ContentProvider() {
-
+    // content://<authority>/<path>/<id>
     companion object {
         const val AUTHORITY = "com.swtecnn.contentproviderlesson.DbContentProvider"
         private val DIARY_ENTRY_TABLE = "DiaryEntry"
+        private val TO_DO_LIST_ENTRY_TABLE = "todo_list"
         val DIARY_TABLE_CONTENT_URI: Uri = Uri.parse("content://" +
         AUTHORITY + "/" + DIARY_ENTRY_TABLE)
     }
 
-    private val DIARY_ENTRIES = 1
-    private val DIARY_ENTRY_ID = 2
+    private val DIARY_ALL_ENTRIES = 1
+    private val DIARY_ENTRY_BY_ID = 2
+
+    private val TODO_LIST_GET_ALL = 11
+    private val TODO_LIST_GET_BY_ID = 12
     private var diaryEntryDao: DiaryEntryDao? = null
+    private  var toDoListDao: ToDoListEntryDao? = null
     private val sUriMatcher = UriMatcher(UriMatcher.NO_MATCH)
 
     init {
-        sUriMatcher.addURI(AUTHORITY, DIARY_ENTRY_TABLE, DIARY_ENTRIES)
-        sUriMatcher.addURI(AUTHORITY, "$DIARY_ENTRY_TABLE/#", DIARY_ENTRY_ID)
+        sUriMatcher.addURI(AUTHORITY, DIARY_ENTRY_TABLE, DIARY_ALL_ENTRIES)
+        sUriMatcher.addURI(AUTHORITY, TO_DO_LIST_ENTRY_TABLE, TODO_LIST_GET_ALL)
+        sUriMatcher.addURI(AUTHORITY, "$TO_DO_LIST_ENTRY_TABLE/#", TODO_LIST_GET_BY_ID)
     }
 
 
     override fun onCreate(): Boolean {
         diaryEntryDao = context?.let { AppDatabase.getInstance(it).diaryEntryDao() }
+        toDoListDao = context?.let { AppDatabase.getInstance(it).toDoListDao() }
         return true
     }
 
@@ -43,17 +49,15 @@ class DbContentProvider: ContentProvider() {
         selectionArgs: Array<out String>?,
         sortOrder: String?
     ): Cursor? {
-        val uriType = sUriMatcher.match(uri)
-        var cursor: Cursor? = null
-        when(uriType){
-            DIARY_ENTRY_ID -> {
-                val id: Long? = uri.lastPathSegment?.toLong()
-                if (id != null) {
-                    cursor = diaryEntryDao?.getById(id)!!
-                }
+        val cursor: Cursor? = when(sUriMatcher.match(uri)){
+            DIARY_ALL_ENTRIES -> {
+                diaryEntryDao?.getAll()
             }
-            DIARY_ENTRIES -> {
-                return diaryEntryDao?.getAll()
+            TODO_LIST_GET_ALL ->{
+                toDoListDao?.getAllCursor()
+            }
+            TODO_LIST_GET_BY_ID ->{
+                uri.lastPathSegment?.toInt()?.let { toDoListDao?.getById(it) }
             }
             else -> throw IllegalArgumentException("Uknown Uri")
         }
@@ -68,7 +72,7 @@ class DbContentProvider: ContentProvider() {
         val uriType = sUriMatcher.match(uri)
         val id: Long?
         when (uriType) {
-            DIARY_ENTRIES -> {
+            DIARY_ALL_ENTRIES -> {
                 val newEntry = DiaryEntry.fromContentValues(values)
                 id = newEntry?.let { diaryEntryDao?.addEntry(it) }
             }

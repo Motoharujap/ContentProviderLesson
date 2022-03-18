@@ -13,9 +13,9 @@ class CPApplication : Application() {
         val diaryEntryDao: DiaryEntryDao = AppDatabase.getInstance(applicationContext).diaryEntryDao()
 
         doAsync {
-            val diaryEntries: List<DiaryEntry> = diaryEntryDao.getAllNotCursor()
+            val allEntriesCursor = diaryEntryDao.getAll()
             val listOfEntries: ArrayList<DiaryEntry> = ArrayList()
-            if (diaryEntries.isEmpty()) {
+            if (allEntriesCursor.count == 0) {
                 for (i in 0..15) {
                     val diaryEntry = DiaryEntry(0, "Entry text number $i", "2021-02-2$i")
                     listOfEntries.add(diaryEntry)

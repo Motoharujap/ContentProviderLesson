@@ -40,7 +40,7 @@ class AudioListFragment : Fragment() {
             MediaStore.Images.Media.DATE_TAKEN
         )
         val cursor = activity?.contentResolver?.query(
-            MediaStore.Audio.Media.EXTERNAL_CONTENT_URI, null, null,
+            MediaStore.Audio.Media.EXTERNAL_CONTENT_URI, projection, null,
             null, null
         )
         val audioList = ArrayList<ContactItem>()

@@ -11,12 +11,6 @@ interface DiaryEntryDao {
     @Query("SELECT id, entry_text, entry_date from DiaryEntry")
     fun getAll(): Cursor
 
-    @Query("SELECT id, entry_text, entry_date from DiaryEntry where id = :id")
-    fun getById(id: Long): Cursor
-
-    @Query("select * from DiaryEntry")
-    fun getAllNotCursor(): List<DiaryEntry>
-
     @Insert
     fun addEntry(entry: DiaryEntry): Long?
 

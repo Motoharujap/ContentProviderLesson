@@ -5,10 +5,10 @@ import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
 
-@Database(entities = [DiaryEntry::class], version = 1)
+@Database(entities = [DiaryEntry::class, ToDoListEntry::class], version = 1)
 abstract class AppDatabase : RoomDatabase(){
     abstract fun diaryEntryDao(): DiaryEntryDao
-
+    abstract fun toDoListDao(): ToDoListEntryDao
     companion object {
         @Volatile
         private var INSTANCE: AppDatabase? = null

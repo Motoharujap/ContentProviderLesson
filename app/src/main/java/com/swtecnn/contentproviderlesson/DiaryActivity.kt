@@ -11,5 +11,6 @@ class DiaryActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         _binding = ActivityDiaryBinding.inflate(layoutInflater)
+        setContentView(binding.root)
     }
 }
